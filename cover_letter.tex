@@ -1,0 +1,46 @@
+% Minimal pandoc template for a cover letter -- replace with your own design.
+$-- Lines starting with $-- are pandoc template comments: stripped from the
+$-- output, and dollars inside them are inert, unlike in a % LaTeX comment.
+\documentclass[letterpaper,11pt]{article}
+
+% pandoc emits \tightlist for any markdown list without blank lines between
+% items, and assumes its own default template defines it
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+% reproducible builds: pdfTeX otherwise hashes the wall clock into the trailer
+% /ID, independently of SOURCE_DATE_EPOCH
+\pdftrailerid{}
+
+% markdown paragraphs are separated by blank lines, so space them rather than indent
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{8pt}
+
+\begin{document}
+
+\begin{center}
+    \textbf{\Huge Your Name} \\
+$-- $$ escapes a literal $, so $$|$$ emits LaTeX's $|$ (inline math).
+$-- A bare | would render as an em dash under OT1.
+    \texttt{you@example.com} $$|$$ \texttt{yourhandle}
+\end{center}
+
+\textbf{RE: $role$ $$|$$ $company$} \hfill $date$
+
+$greeting$
+
+$body$
+
+\noindent $if(signoff)$
+$signoff$
+$else$
+Kind regards,
+$endif$
+
+\noindent $if(signature)$
+$signature$
+$else$
+Your Name
+$endif$
+
+\end{document}
