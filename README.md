@@ -73,21 +73,23 @@ Three things a hand-written letter doesn't need but a template does:
   \providecommand{\tightlist}{%
     \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
   ```
-- **Add `\pdftrailerid{}`** (in both `.tex` files) for reproducible output — see
-  below.
+- **Add `\pdftrailerid{}`** for reproducible output — needed in the pandoc
+  template, but not in `resume.tex`. See below.
 
 ## Reproducible builds
 
 Every PDF is byte-identical across rebuilds, so an unchanged letter never shows
-up as modified in `git status`. Two things are needed, and both are already
-wired into the generated `build.ninja`:
+up as modified in `git status`. Two things do it:
 
 - `SOURCE_DATE_EPOCH` pins `/CreationDate` and `/ModDate`. Letters use their own
   date; the resume uses the last commit touching `resume.tex`, falling back to
-  mtime.
-- `\pdftrailerid{}` in your `.tex` files. pdfTeX otherwise hashes the wall clock
-  into the trailer `/ID`, independently of `SOURCE_DATE_EPOCH`. An empty
-  argument omits `/ID` entirely; a fixed non-empty string keeps a stable one.
+  mtime. This covers metadata only, which is enough because the templates never
+  read TeX's clock -- dates come from `$date$`, so don't introduce `\today`.
+- `\pdftrailerid{}` in `cover_letter.tex`. pdfTeX hashes the creation date *and
+  the output path* into the trailer `/ID`; pandoc invokes the engine with
+  `-outdir` set to a fresh temp directory each run, so that path varies even
+  with the date pinned. An empty argument omits `/ID`; a fixed non-empty string
+  keeps a stable one. `resume.tex` needs neither — it builds with no `-outdir`.
 
 ## Layout
 

@@ -8,8 +8,10 @@ $-- output, and dollars inside them are inert, unlike in a % LaTeX comment.
 \providecommand{\tightlist}{%
   \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
 
-% reproducible builds: pdfTeX otherwise hashes the wall clock into the trailer
-% /ID, independently of SOURCE_DATE_EPOCH
+% Reproducible builds: pdfTeX hashes the output path into the trailer /ID,
+% and pandoc runs the engine with -outdir set to a fresh temp dir each run.
+% Emptying the ID drops it. resume.tex needs no such line: no -outdir, so its
+% output path is stable.
 \pdftrailerid{}
 
 % markdown paragraphs are separated by blank lines, so space them rather than indent
@@ -25,6 +27,8 @@ $-- A bare | would render as an em dash under OT1.
     \texttt{you@example.com} $$|$$ \texttt{yourhandle}
 \end{center}
 
+$-- Dates come from $date$, derived from the letter's filename. Never use
+$-- \today here: it would print the build date, not the letter's.
 \textbf{RE: $role$ $$|$$ $company$} \hfill $date$
 
 $greeting$

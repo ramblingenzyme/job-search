@@ -37,7 +37,7 @@ rule() {
 
     write "rule $name"
     write "  command = $@"
-    write "  description = PDF \$out"
+    write "  description = $name \$in \$out"
     write
 }
 
@@ -92,11 +92,11 @@ write
 
 rule \
     pandoc \
-    "SOURCE_DATE_EPOCH=\$epoch FORCE_SOURCE_DATE=1 pandoc --pdf-engine=latexmk --template=\$template -V date=\"\$date\" -o \$out \$in"
+    "SOURCE_DATE_EPOCH=\$epoch pandoc --pdf-engine=latexmk --template=\$template -V date=\"\$date\" -o \$out \$in"
 
 rule \
     latexmk \
-    "SOURCE_DATE_EPOCH=\$epoch FORCE_SOURCE_DATE=1 latexmk -pdf -quiet -auxdir=\$auxdir -jobname=\$jobname \$in"
+    "SOURCE_DATE_EPOCH=\$epoch latexmk -pdf -quiet -auxdir=\$auxdir -jobname=\$jobname \$in"
 
 build "$RESUME_PDF" latexmk "$RESUME_SRC"
 binding jobname "$NAME"
